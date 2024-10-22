@@ -2,9 +2,9 @@
 Script Workflow
 1. Load Datasets
 The datasets are loaded using pandas:
-•	Google: google_dataset.csv
-•	Facebook: facebook_dataset.csv
-•	Website: website_dataset.csv (semicolon-separated)
+-	Google: google_dataset.csv
+-	Facebook: facebook_dataset.csv
+-	Website: website_dataset.csv (semicolon-separated)
 The files are processed with on_bad_lines='skip' to handle any erroneous lines in the data.
 
 3. Clean Phone Numbers
@@ -17,27 +17,33 @@ It also processes attributes that contain multiple values separated by | and kee
 
 7. Standardize Column Names
 The script standardizes the column names across the three datasets to ensure consistency:
-•	Google: ['phone', 'category', 'name', 'city', 'country', 'region']
-•	Facebook: ['phone', 'category', 'name', 'city', 'country']
-•	Website: ['phone', 'category', 'name', 'city', 'country', 'region']
+-	Google: ['phone', 'category', 'name', 'city', 'country', 'region']
+-	Facebook: ['phone', 'category', 'name', 'city', 'country']
+-	Website: ['phone', 'category', 'name', 'city', 'country', 'region']
 
 9. Data Cleaning and Deduplication
-•	Rows with missing phone numbers are removed.
-•	Text fields (city, country, region) are converted to lowercase for uniformity.
-•	Empty cells in other columns are filled with NULL.
-•	Duplicate rows based on the phone column are eliminated.
+-	Rows with missing phone numbers are removed.
+-	Text fields (city, country, region) are converted to lowercase for uniformity.
+-	Empty cells in other columns are filled with NULL.
+-	Duplicate rows based on the phone column are eliminated.
 
 11. Merging Datasets
 The datasets are merged using an outer join on the phone column. Missing values in common columns are filled with a prioritization order: website -> google -> facebook.
 merged_df['name'] = merged_df['name_website'].fillna(merged_df['name_google']).fillna(merged_df['name'])
 
 13. Final Data Cleaning
-•	Unnecessary columns after the merge are dropped.
-•	Rows with missing or invalid name values are filtered out.
+-	Unnecessary columns after the merge are dropped.
+-	Rows with missing or invalid name values are filtered out.
 
 15. Save Output
 The cleaned and merged dataset is saved into an Excel file:
 merged_df.to_excel('merged_cleaned_data_single_columns.xlsx', index=False)
+
+16. Data Analysis and Visualization
+- Dataset Overview: Descriptive statistics and data type information are generated.
+- The top 10 business categories are identified using frequency analysis, followed by a bar chart visualization.
+- The distribution of business categories by country is explored through grouping and visualized as a stacked bar chart for the top 5 countries. 
+- Missing data is analyzed, highlighting rows with null values in key columns like category, phone, and name.  
 
 Observations:
 - The phone column is used as the common key across the datasets to join them. It is a reliable, unique identifier that ensures consistency between the records from the Google, Facebook, and website datasets.
